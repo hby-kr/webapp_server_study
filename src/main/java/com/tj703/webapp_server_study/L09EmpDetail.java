@@ -71,12 +71,13 @@ public class L09EmpDetail extends HttpServlet {
             resp.setContentType("text/html");
             PrintWriter out = resp.getWriter();
             out.println("<h1> 사원 상세</h1>");
-            out.println("<p> 사원 번호 : "+ emp.get("emp_no") +"</p>");
-            out.println("<p> 사원 이름 : "+ emp.get("first_name") +"</p>");
-            out.println("<p> 사원 성씨 : "+ emp.get("last_name") +"</p>");
-            out.println("<p> 사원 성별 : "+ emp.get("gender") +"</p>");
-            out.println("<p> 사원 생일 : "+ emp.get("birth_date") +"</p>");
-            out.println("<p> 사원 입사일 : "+ emp.get("hire_date") +"</p>");
+            out.println("<p> 사원 번호 : " + emp.get("emp_no") + "</p>");
+            out.println("<p> 사원 이름 : " + emp.get("first_name") + "</p>");
+            out.println("<p> 사원 성씨 : " + emp.get("last_name") + "</p>");
+            out.println("<p> 사원 성별 : " + emp.get("gender") + "</p>");
+            out.println("<p> 사원 생일 : " + emp.get("birth_date") + "</p>");
+            out.println("<p> 사원 입사일 : " + emp.get("hire_date") + "</p>");
+            out.println("<p><a href='./empModify.do?emp_no=" + emp.get("emp_no") + "'>수정하기</a></p>");
         }
 
     }

@@ -13,7 +13,7 @@ import java.sql.PreparedStatement;
 
 // 액션 페이지, 액션리소스. 회원가입 폼을 받아서 creat만 하고 리다이렉트한다.
 @WebServlet("/empSignupAction.do")
-public class L08empSignupAction extends HttpServlet {
+public class L08EmpSignupAction extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -76,9 +76,9 @@ public class L08empSignupAction extends HttpServlet {
         // 오류가 발생하거나, 등록이 안되면 insert=0이다. -> 다시 양식페이지로 이동. empSignup.html로 이동
         // insert=1 이면 등록 성공. empList (empCRUD.do)로 이동
         if (insert > 0) {
-            resp.sendRedirect("/empCRUD.do");
+            resp.sendRedirect("./empCRUDList.do");
         } else {
-            resp.sendRedirect("/empSignup.html");
+            resp.sendRedirect("./empSignup.html");
         }
 
 

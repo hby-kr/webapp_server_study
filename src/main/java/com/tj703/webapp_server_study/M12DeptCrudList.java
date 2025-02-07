@@ -1,6 +1,5 @@
 package com.tj703.webapp_server_study;
 
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,16 +14,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/empCRUDList.do")
-public class L07EmpCrudList extends HttpServlet {
+@WebServlet("/deptCRUD.do")
+public class M12DeptCrudList extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        // JDBC로 Db에서 불러오기
         String url = "jdbc:mysql://localhost:3306/employees";
         String username = "root";
         String password = "mysql";
         String driver = "com.mysql.cj.jdbc.Driver";
-        String sql = "select * from employees order by emp_no limit 20 ";
+        String sql = "select * from departments order by dept_no";
 
         List<Map> empList = null;
 
@@ -42,16 +43,10 @@ public class L07EmpCrudList extends HttpServlet {
 
             while (rs.next()) {
                 Map emp = new HashMap();
-                emp.put("emp_no", rs.getString("emp_no"));
-                emp.put("first_name", rs.getString("first_name"));
-                emp.put("last_name", rs.getString("last_name"));
-                emp.put("gender", rs.getString("gender"));
-                emp.put("birth_date", rs.getString("birth_date"));
-                emp.put("hire_date", rs.getString("hire_date"));
-
+                emp.put("dept_no", rs.getString("dept_no"));
+                emp.put("dept_name", rs.getString("dept_name"));
                 empList.add(emp);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -60,36 +55,33 @@ public class L07EmpCrudList extends HttpServlet {
             if (conn != null) {try { conn.close();} catch (SQLException e) {}}
         }
 
+        // 응답할 동적리소스 생성하기
         resp.setContentType("text/html");
-
         PrintWriter out = resp.getWriter();
         out.println("<html>");
-        out.println("<h1> 사원 관리 페이지 </h1>");
-        out.println("<br><hr>");
-        out.println("<h2> 사원리스트 </h2>");
-        out.println("<a href='./empSignup.html'> 사원등록 폼 </a>");
-        out.println("<br><hr>");
+        out.println("<h1> 부서사원 관리 페이지 </h1>");
+        out.println("<hr><br>");
+        out.println("<h2> 부서 리스트 </h2>");
+        out.println("<a href='./deptSignup.html'> 부서 등록할 수 있음 (페이지이동) </a>");
+        out.println("<br><hr><br>");
 
         out.println("<table>");
         out.println("<tr>");
-        out.println("<th>사번</th>");
-        out.println("<th>이름</th>");
-        out.println("<th>성씨</th>");
-        out.println("<th>상세보기</th>");
+        out.println("<th>부서번호</th>");
+        out.println("<th>부서이름</th>");
+        out.println("<th>수정하기</th>");
         out.println("</tr>");
+
         for (Map emp : empList) {
             out.println("<tr>");
-            out.println("<td>" + emp.get("emp_no") +"</td>");
-            out.println("<td>" + emp.get("first_name") +"</td>");
-            out.println("<td>" + emp.get("last_name") +"</td>");
-            out.println("<td><a href='./empDetail.do?emp_no=" + emp.get("emp_no")+ "'> 상세 </a> </td>");
+            out.println("<td>" + emp.get("dept_no") +"</td>");
+            out.println("<td>" + emp.get("dept_name") +"</td>");
+            out.println("<td><a href='./deptModify.do?dept_no=" + emp.get("dept_no")+ "'> 수정 </a> </td>");
             out.println("</tr>");
         }
 
         out.println("</table>");
         out.println("<br><hr>");
         out.println("</html>");
-
-
     }
 }
