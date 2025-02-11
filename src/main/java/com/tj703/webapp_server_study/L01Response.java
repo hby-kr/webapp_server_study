@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
+// .do와 같은 확장자는 서블릿 요청과 일반 웹 페이지 요청을 구분하는 데 유용
+// .html 파일이나 .jsp 파일은 정적 리소스로 처리되고, .do는 서블릿으로 처리된다는 구분을 할 수 있습니다.
 @WebServlet("/resStudy.do")
 public class L01Response extends HttpServlet { // 동적리소스가 되려면 꼭 HttpServlet를 상속받아야 한다.
     // 비어있으면 405오류

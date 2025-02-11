@@ -21,8 +21,9 @@ public class M14DeptModify extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        String deptNo = req.getParameter("dept_no");  // 일단 doGet에 파라미터 값부터 받기
+
         // 1. JDBC 작업, db값 불러오기
-        String deptNo = req.getParameter("dept_no");
         String sql = "select * from departments where dept_no = ?";
 
         String url = "jdbc:mysql://localhost:3306/employees";

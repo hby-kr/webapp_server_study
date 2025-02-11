@@ -14,7 +14,7 @@
 
 <h2>수업 링크</h2>
 <ul>
-    <li><a href="hello-servlet"></a></li>
+    <li><a href="hello-servlet">hello-servlet</a></li>
     <li><a href="resStudy.do">응답 수업</a></li>
     <li><a href="reqStudy.do">요청 수업</a></li>
     <li><a href="queryStringStrudy.do?name=abce&age=30">쿼리스트링 수업 (파라미터 name, age)</a></li>
@@ -22,6 +22,12 @@
     <li><a href="jdbcDeptList.do">JDBC 부서 리스트 수업</a></li>
     <li><a href="empCRUDList.do">JDBC 사원 관리CRUD 웹앱 수업</a></li>
     <li><a href="deptCRUD.do">JDBC 부서 관리 웹앱 제작 과제</a></li>
+    <br>
+    <li><a href="L12ViewTemplateJSP.jsp">View Template JSP</a></li>
+    <li><a href="L13DeptList.jsp"> JSP로 구현하는 부서리스트 </a></li>
+    <br>
+    <li><a href="model2/empList.do">모델2로 구현한 사원 리스트</a></li>
+<!--           ./model2/empList.do-->
 </ul>
 
 <br><hr>
@@ -58,19 +64,88 @@
 
 </div>
 
-
 <br><hr>
 <h2>경로 수업</h2>
+
+<!--
+WAS(웹앱서버) 개발에서 경로를 분류하면 일단 크게 둘이다.  (절대, 상대 다 접어두고.)
+1) 서버 내부 경로(실제 경로)
+2) 서블릿 매핑 URL 경로 (가상으로 만든 경로)
+어느 것을 어떻게 사용할지에 대한 차이는
+요청이 서버 내에서 처리되는지, 아니면 클라이언트에서 요청되는지이다.
+
+1) (내부에서만)
+    서버 내부 경로는 서버 내에서 요청을 포워드할 때 사용.
+    즉 클라이언트가 요청하는 URL과는 별개로, 서버가 요청을 내부적으로 다른 리소스로 전달할 때 사용
+    - 서버 내에서 JSP 파일을 동적으로 렌더링하려는 경우
+    - 다른 서블릿으로 포워드할 때(서버에서 요청을 다른 서블릿으로 전달하여 다른 로직을 실행하게 할 때)
+    클라이언트는 이 경로를 직접 알지 못합니다.
+
+2) (외부에서 내부로)
+    서블릿 매핑 URL은 클라이언트가 요청을 보낼 때 사용하는 URL 경로.
+    이 URL을 통해 클라이언트는 서버에 HTTP 요청을 보내고, 서버는 그 요청에 맞는 서블릿이나 컨트롤러가 처리하도록 매핑.
+
+
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ  서버 내부 경로든,  서블릿 매핑 URL이든 경로를 적는 방식이 있는데
+그게 크게 절대경로와 상대경로로 나눠 설명할 수 있다.
+
+
+가상 주소가 이렇다고 치자.
+http://localhost:8080/country/province/region/home/myapp/index.jsp
+http://localhost:8080/                                              [호스트와 포트 번호, 루트경로]
+                      country/province/region/home/myapp/index.jsp  [절대경로로 파일 접근하기]
+                      country/province/region/home/myapp/           [애플리케이션 루트 경로] (myapp 폴더(디렉토리)에서 서비스가 구동되는 것임)
+                                                                     (즉, 웹 애플리케이션이 서버에 배포된 위치)
+                                                   myapp/           [context path] (여러 웹앱을 서버에서 동시에 실행하기 위해 생성한 경로)
+                                                        /index.jsp  [최종적로 요청된 리소스, 내가 열고 있는 파일]
+
+루트경로;   Root 경로는 웹 애플리케이션이 서버에 배포된 위치. 웹 서버에서 애플리케이션의 최상위 디렉토리.
+절대경로;   현재 위치와 무관하게 웹 서버의 "루트 경로"에서 시작하는 경로
+상대경로;   상대 경로는 현재 문서나 리소스의 위치를 기준으로 다른 리소스를 찾는 경로
+현재위치;   상대주소의 "현재 위치"는 현재 문서나 리소스의 URL을 기준으로 정의
+
+>> 절대경로
+/로 시작하면 절대경로임. 루트부터 찾음.
+
+/없이 myapp.jsp라고 그냥 경로, 이름을 쓰거나,
+쩜으로 시작하거나 ./
+쩜쩜으로 시작하면 ../  상대경로. 현재기준임.
+
+절대경로  /about.jsp는
+        "루트 경로에서 about.jsp를 찾으라"이므로
+        http://localhost:8080/about.jsp로 요청
+
+절대경로  /myapp/index.jsp는
+        "루트 경로에서 myapp/index.jsp를 찾으라"이므로
+        http://localhost:8080/myapp/index.jsp로 요청
+
+상대경로 about.jsp와 ./about.jsp는 값음.
+        "지금 위치에서 about.jsp를 찾으라"
+        http://localhost:8080/country/province/region/home/myapp/about.jsp를 가리킵니다.
+        
+상대경로 ../index.jsp는
+        "상위 디렉토리에서 index.jsp를 찾으라"으므로
+         http://localhost:8080/country/province/region/home/index.jsp로 해석됩니다.
+
+상대경로 ../../otherpage.jsp는
+        "두 단계 상위 디렉토리에서 otherpage.jsp를 찾으라"이므로
+         http://localhost:8080/country/province/otherpage.jsp로 해석됩니다.
+
+-->
 <ul>
     <li>절대경로 :( https://naver.com, c://windows/.... ) 현재 위치와 무관하게 해당 경로의 리소스를 찾는다.</li>
-    <li>상대경로 : (/book.com) 현재 위치를 기준으로 최상위 경로로 이동해서 book.com 을 찾는다
+    <br>
+    <li>절대경로 : (/book.com) (/로 시작!!) (현재 위치 상관없이) 현재위치에서 기준으로 최상위 경로(root경로)로 이동해서 book.com 을 찾는다
         <ol>
             <li>현재위치 https://naver.com/store/detail/web/detail.do => https://naver.com/book.com</li>
             <li>현재위치 c://windows/store/detail/web/ => c://book.com</li>
             <li>현재위치 /Users/desktop/tomcat/ => /book.com</li>
         </ol>
     </li>
-    <li>상대경로 : (./book.com or .book.com or book.com) 현재 경로에 있는 리소스 탐색
+    <hr>
+    <br>
+
+    <li>상대경로 : (./book.com 이거나  book.com) 현재 위치에서 리소스 탐색 ex) ./home/book.com과 home/book.com도  동일한 위치
         <ol>
             <li>현재위치
                 https://naver.com/store/detail/web/detail.do
@@ -81,7 +156,7 @@
             <li>현재위치 /Users/desktop/tomcat/ => /Users/desktop/tomcat/book.com</li>
         </ol>
     </li>
-    <li>상대경로 : (../book.com or ..book.com ) 현재 경로의 이전 폴더에 있는 리소스 탐색
+    <li>상대경로 : (../book.com or ..book.com ) 현재 경로의 상위 폴더에 있는 리소스 탐색
         <ol>
             <li>현재위치
                 https://naver.com/store/detail/web/detail.do
@@ -104,6 +179,8 @@
         </ol>
     </li>
 </ul>
+
+
 
 </body>
 </html>

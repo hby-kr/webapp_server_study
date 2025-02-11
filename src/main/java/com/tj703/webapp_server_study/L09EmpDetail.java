@@ -36,7 +36,7 @@ public class L09EmpDetail extends HttpServlet {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        HashMap<String, Object> emp = null;
+        HashMap<String, Object> emp = null;  // 무엇을 받을지 모르기 때문에 Object로 통으로 받는 것임.. 개선하는 방법은 DTO를 만드는 것.
 
         try {
             int empNo = Integer.parseInt(empNoStr);
