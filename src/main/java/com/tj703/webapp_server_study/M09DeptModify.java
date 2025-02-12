@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 // 각각의 리스트 각각의 부서에
 @WebServlet("/deptModify.do")  // 절대경로
-public class M14DeptModify extends HttpServlet {
+public class M09DeptModify extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

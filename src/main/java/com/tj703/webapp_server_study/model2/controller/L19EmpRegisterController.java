@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/model2/empRegister.do")
-public class L19EmpResiterController extends HttpServlet {
+public class L19EmpRegisterController extends HttpServlet {
 
     // get -> 등록 받기 폼 (포워드 방식)
     @Override
@@ -45,6 +45,11 @@ public class L19EmpResiterController extends HttpServlet {
         } catch (Exception e) {
             // 가능한 오류:  DB가 생성되지 않은 경우, 파라미터가 잘못된 경우, ...
             e.printStackTrace();
+        } finally { // 무조건 한번은 실행한다.
+            if (empDao != null) {
+                empDao.close();
+            }
+
         }
 
         // 리다이렉트

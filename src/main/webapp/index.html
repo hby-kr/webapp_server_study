@@ -20,17 +20,19 @@
     <li><a href="queryStringStrudy.do?name=abce&age=30">쿼리스트링 수업 (파라미터 name, age)</a></li>
     <li><a href="errorStudy.do">에러 처리 수업</a></li>
     <li><a href="jdbcDeptList.do">JDBC 부서 리스트 수업</a></li>
-    <li><a href="empCRUDList.do">JDBC 사원 관리CRUD 웹앱 수업</a></li>
-    <li><a href="deptCRUD.do">JDBC 부서 관리 웹앱 제작 과제</a></li>
+    <li><a href="empCRUDList.do">JDBC "사원" 관리CRUD 웹앱 수업</a></li>
+
+    <li><a href="deptCRUD.do">JDBC "부서" 관리 웹앱 제작 과제 (연습과제) </a></li>
     <br>
     <li><a href="L12ViewTemplateJSP.jsp">View Template JSP</a></li>
-    <li><a href="L13DeptList.jsp"> JSP로 구현하는 부서리스트 </a></li>
+    <li><a href="L13DeptList.jsp"> JSP로 구현하는 "부서"리스트 </a></li>
     <br>
-    <li><a href="model2/empList.do">모델2로 구현한 사원 리스트</a></li>
-<!--           ./model2/empList.do-->
+    <li><a href="model2/empList.do">모델2로 구현한 "사원" 리스트</a></li>
+<!--           ./model2/empList.do  -->
+    <li><a href="model2/deptList.do">모델2로 구현한 "부서" 리스트 (연습과제)</a></li>
 </ul>
-
 <br><hr>
+
 <div>
     <h3> GET & POST 차이점,  요청 헤더(request header body) 정보</h3>
     <p>GET : 브라우저에서 link나 url로 서버에 리소스를 요청하는 행위.  요청의 목적이 조회 </p>
@@ -42,29 +44,23 @@
 
 <!-- action이 요청하는 곳, 주소를 쓰면 됨   -->
     <form method="post" action="postStudy.do">
-        <p>
-            <label>
-                유저계정 :
-                <input type="text" name="userId" value="경만">
-            </label>
-        </p>
-
-        <p>
-            <label> 비밀번호 :
-                <input type="password" name="userPw" value="123456">
-            </label>
-        </p>
-
+        <p><label>
+            유저계정 :<input type="text" name="userId" value="경만">
+        </label></p>
+        <p><label>
+            비밀번호 :<input type="password" name="userPw" value="123456">
+        </label></p>
         <p>
             <button type="button">그냥버튼</button>
             <button type="reset">양식 내부의 input 값을 최초값으로 변경</button>
             <button type="submit">제출</button>
         </p>
     </form>
-
 </div>
-
 <br><hr>
+
+
+
 <h2>경로 수업</h2>
 
 <!--
@@ -93,6 +89,7 @@ WAS(웹앱서버) 개발에서 경로를 분류하면 일단 크게 둘이다.  
 가상 주소가 이렇다고 치자.
 http://localhost:8080/country/province/region/home/myapp/index.jsp
 http://localhost:8080/                                              [호스트와 포트 번호, 루트경로]
+                                                                        cf. 서버 루트경로와 어플리케이션 루트경로는 다르다.
                       country/province/region/home/myapp/index.jsp  [절대경로로 파일 접근하기]
                       country/province/region/home/myapp/           [애플리케이션 루트 경로] (myapp 폴더(디렉토리)에서 서비스가 구동되는 것임)
                                                                      (즉, 웹 애플리케이션이 서버에 배포된 위치)
@@ -119,7 +116,8 @@ http://localhost:8080/                                              [호스트�
         "루트 경로에서 myapp/index.jsp를 찾으라"이므로
         http://localhost:8080/myapp/index.jsp로 요청
 
-상대경로 about.jsp와 ./about.jsp는 값음.
+상대경로   about.jsp와
+        ./about.jsp는 값음.
         "지금 위치에서 about.jsp를 찾으라"
         http://localhost:8080/country/province/region/home/myapp/about.jsp를 가리킵니다.
         

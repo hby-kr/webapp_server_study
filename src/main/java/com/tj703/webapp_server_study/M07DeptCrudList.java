@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet("/deptCRUD.do")
-public class M12DeptCrudList extends HttpServlet {
+public class M07DeptCrudList extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

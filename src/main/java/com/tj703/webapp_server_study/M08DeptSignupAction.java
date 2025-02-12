@@ -8,13 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 // 액션 페이지, 액션리소스
 @WebServlet("/deptSignupAction.do") // 절대경로 설정
-public class M13DeptSignupAction extends HttpServlet {
+public class M08DeptSignupAction extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

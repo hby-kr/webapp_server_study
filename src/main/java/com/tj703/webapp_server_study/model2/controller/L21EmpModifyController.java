@@ -38,6 +38,11 @@ public class L21EmpModifyController extends HttpServlet {
             update = empDao.update(emp); // 성공시 1
         } catch (Exception e) {
             e.printStackTrace();
+        } finally { // 무조건 한번은 실행한다.
+            if (empDao != null) {
+                empDao.close();
+            }
+
         }
 
         // 리다이렉트

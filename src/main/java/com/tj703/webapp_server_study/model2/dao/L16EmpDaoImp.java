@@ -5,6 +5,7 @@ import com.tj703.webapp_server_study.model2.dto.L17EmpDto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +110,17 @@ public class L16EmpDaoImp implements L16EmpDao {
         delete = ps.executeUpdate();
 
         return delete;
+    }
+
+    @Override
+    public void close() {
+        try {
+            if (rs != null) { rs.close();}
+            if (ps != null) { ps.close();}
+            if (conn != null) { conn.close();}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

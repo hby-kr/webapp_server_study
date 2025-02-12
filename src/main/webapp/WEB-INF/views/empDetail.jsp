@@ -43,8 +43,7 @@
         <button type="reset">초기화</button>
         <button type="submit">제출</button>
     </p>
-        <p><a href="<%=request.getContextPath()%>/model2/empDelete.do?emp_no=<%=emp.getEmpno()%>">회원정보 삭제</a></p>
-
+    <p><a href="<%=request.getContextPath()%>/model2/empDelete.do?emp_no=<%=emp.getEmpno()%>">회원정보 삭제</a></p>
 </form>
 </body>
 </html>

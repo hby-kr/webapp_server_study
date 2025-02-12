@@ -33,6 +33,11 @@ public class L18EmpListController extends HttpServlet {
             // 400: 클라이언트 요청 오류
             // 404: 요청한 리소스 없음
             // 500: 서버 내부 오류
+        } finally { // 무조건 한번은 실행한다.
+            if (empDao != null) {
+                empDao.close();
+            }
+
         }
 
         // DB는 empList로 불러왔는데, 그 이후 화면에 뿌려주는 방법은 뷰 템플릿 엔진으로 하려고 하니까... 포워딩

@@ -37,6 +37,11 @@ public class L20EmpDetailController extends HttpServlet {
             e.printStackTrace();
             resp.sendError(500);
             return;
+        } finally { // 무조건 한번은 실행한다.
+            if (dao != null) {
+                dao.close();
+            }
+
         }
 
         // 가져온 DB를 보여줄 View로 포워드

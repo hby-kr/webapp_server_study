@@ -9,10 +9,10 @@ public class L15SingletonDB {
      */
 
     private static Connection conn; // private으로 만들어서 접근할 수 없게 만들고
-    public static final String URL = "jdbc:mysql://localhost:3306/employees";
-    public static final String USER = "root";
-    public static final String PASSWORD = "mysql";
-    public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String URL = "jdbc:mysql://localhost:3306/employees";
+    private static final String USER = "root";
+    private static final String PASSWORD = "mysql";
+    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     static { // 새로운 것!  컴파일시 static{}을 함수처럼 호출  // 컴파일 될 때 객체가 만들어지길 바란다면 이렇게 쓰면 됨
         try {

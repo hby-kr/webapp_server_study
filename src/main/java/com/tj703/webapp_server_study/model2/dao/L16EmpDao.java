@@ -22,5 +22,7 @@ public interface L16EmpDao {
 
     int deleteById(int empNo) throws Exception;
 
+    void close();
+
 
 }
