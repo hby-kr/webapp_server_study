@@ -3,6 +3,8 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.*" %>
 
+<%--  jsp로 db까지 접속하기  --%>
+
 <%!
     public static final String URL = "jdbc:mysql://localhost:3306/employees";
     public static final String USER = "root";
@@ -58,7 +60,8 @@
     </tr>
     </thead>
 
-    <tbody>
+    <tbody>  <%--  여기가 특이함!!!!!!!!!!!!!!!!!!!!!!!  --%>
+
     <% for(Map<String,String> dept : deptList){ %>
     <%-- deptList에서 요소들이 Map 하나하나를 꺼내서 HTML구조를 만들기 --%>
     <tr >
@@ -69,6 +72,7 @@
         </td>
     </tr>
     <%}%>
+
     </tbody>
 </table>
 </body>

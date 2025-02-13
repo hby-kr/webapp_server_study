@@ -12,18 +12,18 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
 // 액션 페이지, 액션리소스. 회원가입 폼을 받아서 creat만 하고 리다이렉트한다.
+// emp를 등록하는 action 페이지
 @WebServlet("/empSignupAction.do")
 public class L08EmpSignupAction extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // emp를 등록하는 action 페이지
         //   1. 양식데이터 받기
         //   2. 양식데이터 처리 (JDBC)
         //   3. redirect로 페이지 이동
 
 
-        //   1. 양식데이터 받기
+        //   1. 파라미터(매개변수) 받기
         String empNoStr = req.getParameter("emp_no");
         String firstName = req.getParameter("first_name");
         String lastName = req.getParameter("last_name");

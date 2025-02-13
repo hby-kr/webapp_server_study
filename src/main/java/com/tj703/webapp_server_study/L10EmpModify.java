@@ -14,16 +14,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
+
 @WebServlet("/empModify.do")
 public class L10EmpModify extends HttpServlet {
+// 본격 수정을 위한 페이지.  여긴 doGet, doPost가 모두 있는데
+// doGet은 db자료 불러와 form요소를 보여주고
+// doPost는 form요소로 제출된 데이터를 처리한다.
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 수정페이지는 상세페이지와 서비스(DB) 구현은 같은데 뷰 부분만 조금 다를뿐.  그래서 09를 복붙
 
+        // 파라미터 처리
         String empNoStr = req.getParameter("emp_no");
-        String sql = "select * from employees where emp_no = ?";
 
+        // model 작업
+        String sql = "select * from employees where emp_no = ?";
         String url = "jdbc:mysql://localhost:3306/employees";
         String user = "root";
         String password = "mysql";
@@ -34,10 +39,8 @@ public class L10EmpModify extends HttpServlet {
         ResultSet rs = null;
 
         HashMap<String, Object> emp = null;
-
         try {
             int empNo = Integer.parseInt(empNoStr);
-
             Class.forName(driver);
             conn = DriverManager.getConnection(url, user, password);
             ps = conn.prepareStatement(sql);
@@ -64,6 +67,8 @@ public class L10EmpModify extends HttpServlet {
             return;
         }
 
+
+        // 뷰 작업
         if (emp != null) {
             resp.setContentType("text/html");
             PrintWriter out = resp.getWriter();
@@ -84,15 +89,19 @@ public class L10EmpModify extends HttpServlet {
         } else {
             resp.sendRedirect("./empCRUDList.do");
         }
-
-
     }
+
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 08 empsignup.do 과 비슷, 파라미터가 조금 다를 뿐. (creat와 update는 비슷)
+        // form으로 받은 자료 처리하기.
+        //   1. 파라미터 처리
+        //   2. form양식데이터 처리 (JDBC)
+        //   3. 리다이렉트
 
-        //   1. 양식데이터 받기
+
+        //   1. 파라미터 처리
         String empNoStr = req.getParameter("emp_no");
         String firstName = req.getParameter("first_name");
         String lastName = req.getParameter("last_name");
@@ -102,7 +111,7 @@ public class L10EmpModify extends HttpServlet {
         // 모든 파라미터는 모두 문자열이다.
 
 
-        //   2. 양식데이터 처리 (JDBC)
+        //   2. form양식데이터 처리 (JDBC)
         String url = "jdbc:mysql://localhost:3306/employees";
         String user = "root";
         String password = "mysql";
@@ -130,12 +139,10 @@ public class L10EmpModify extends HttpServlet {
         }
 
         // 3. 리다이렉트
-
         if (update > 0) { // 성공
             resp.sendRedirect("./empDetail.do?emp_no="+empNoStr);
         } else {
             resp.sendRedirect("./empModify.do?emp_no="+empNoStr);
         }
-
     }
 }

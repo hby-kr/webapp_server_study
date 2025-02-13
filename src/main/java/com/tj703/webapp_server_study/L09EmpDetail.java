@@ -12,15 +12,19 @@ import java.sql.*;
 import java.util.HashMap;
 
 
+// 상세정보 페이지
 @WebServlet("/empDetail.do")
 public class L09EmpDetail extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        // 파라미터 처리
         String empNoStr = req.getParameter("emp_no");
-        String sql = "select * from employees where emp_no = ?";
 
+
+        // model 구현
+        String sql = "select * from employees where emp_no = ?";
         String url = "jdbc:mysql://localhost:3306/employees";
         String user = "root";
         String password = "mysql";
@@ -35,7 +39,6 @@ public class L09EmpDetail extends HttpServlet {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-
         HashMap<String, Object> emp = null;  // 무엇을 받을지 모르기 때문에 Object로 통으로 받는 것임.. 개선하는 방법은 DTO를 만드는 것.
 
         try {
@@ -56,7 +59,6 @@ public class L09EmpDetail extends HttpServlet {
                 emp.put("birth_date", rs.getString("birth_date"));
                 emp.put("hire_date", rs.getString("hire_date"));
             }
-
         } catch (NumberFormatException e) {
             e.printStackTrace();
             resp.sendError(400); // 400 = 있어야할 파라미터가 없다.

@@ -15,11 +15,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @WebServlet("/empCRUDList.do")
 public class L07EmpCrudList extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        // DB 작업 (model) (model1 디자인 패턴으로 구현)
         String url = "jdbc:mysql://localhost:3306/employees";
         String username = "root";
         String password = "mysql";
@@ -36,7 +39,7 @@ public class L07EmpCrudList extends HttpServlet {
             Class.forName(driver);
             conn = DriverManager.getConnection(url, username, password);
             stmt = conn.createStatement();
-            rs=stmt.executeQuery(sql);
+            rs = stmt.executeQuery(sql);
 
             empList = new ArrayList<>();
 
@@ -51,7 +54,6 @@ public class L07EmpCrudList extends HttpServlet {
 
                 empList.add(emp);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -60,6 +62,8 @@ public class L07EmpCrudList extends HttpServlet {
             if (conn != null) {try { conn.close();} catch (SQLException e) {}}
         }
 
+
+        // view 부분
         resp.setContentType("text/html");
 
         PrintWriter out = resp.getWriter();
@@ -79,10 +83,10 @@ public class L07EmpCrudList extends HttpServlet {
         out.println("</tr>");
         for (Map emp : empList) {
             out.println("<tr>");
-            out.println("<td>" + emp.get("emp_no") +"</td>");
-            out.println("<td>" + emp.get("first_name") +"</td>");
-            out.println("<td>" + emp.get("last_name") +"</td>");
-            out.println("<td><a href='./empDetail.do?emp_no=" + emp.get("emp_no")+ "'> 상세 </a> </td>");
+            out.println("<td>" + emp.get("emp_no") + "</td>");
+            out.println("<td>" + emp.get("first_name") + "</td>");
+            out.println("<td>" + emp.get("last_name") + "</td>");
+            out.println("<td><a href='./empDetail.do?emp_no=" + emp.get("emp_no") + "'> 상세 </a> </td>");
             out.println("</tr>");
         }
 

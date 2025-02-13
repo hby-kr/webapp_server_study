@@ -20,6 +20,10 @@ public class M21DeptModifyContoller extends HttpServlet {
 
         // 파라미터 받기
         String deptNoStr = req.getParameter("dept_no");
+        if(deptNoStr==null || deptNoStr.isEmpty() || deptNoStr.length()>4){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
         // DB에서 부서정보 불러오기
         M16DeptDao dao = null;
@@ -57,7 +61,7 @@ public class M21DeptModifyContoller extends HttpServlet {
         // update 작업 수행
         M16DeptDao dao = null;
         M17deptDto dept = null;
-        int update = 0;
+        int update = 0; // 성공한 갯수
         try {
             dept = new M17deptDto();
             dept.setDeptNoStr(deptNoStr);

@@ -32,14 +32,11 @@ public class M19DeptRegisterController extends HttpServlet {
             return; // 오류면, 함수전체를 여기서 종료.
         }
 
-
-
         // DB로 create 작업
-        M17deptDto dept = null;
         M16DeptDao dao = null;
         int insert = 0;
         try {
-            dept = new M17deptDto();
+            M17deptDto dept = new M17deptDto();
             dept.setDeptNoStr(deptNo);
             dept.setDeptName(req.getParameter("dept_name"));
 

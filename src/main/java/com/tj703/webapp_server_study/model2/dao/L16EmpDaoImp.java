@@ -49,7 +49,7 @@ public class L16EmpDaoImp implements L16EmpDao {
     }
 
     @Override
-    public L17EmpDto findById(int empNo) throws Exception {
+    public L17EmpDto findById(Integer empNo) throws Exception {
         L17EmpDto findById = null;
 
         String sql = "select * from employees where emp_no = ?";
@@ -102,7 +102,7 @@ public class L16EmpDaoImp implements L16EmpDao {
     }
 
     @Override
-    public int deleteById(int empNo) throws Exception {
+    public int deleteById(Integer empNo) throws Exception {
         int delete = 0;
         String sql = "delete from employees where emp_no = ?";
         ps = conn.prepareStatement(sql);

@@ -22,18 +22,16 @@ JSP 코드를 작성하면 내부적으로 서블릿의 doGet() 메서드가 이
 </head>
 <body>
 
-<h1> View template jsp (java servlet page) </h1>
+<h1> View template engine, jsp (java servlet page) </h1>
 <%--
 뷰 템플릿은 HTML, XML, JSON, 또는 다른 형태의 출력 형식
-뷰 템플릿 엔진은 서버에서 동적으로 HTML 등의 뷰템플릿을 생성
-따라서 뷰 템플릿 엔진은 뷰를 구현하는 데 도움을 주는 도구입니다.
+뷰 템플릿 엔진은 서버에서 동적으로 HTML 등의 뷰템플릿을 생성. 따라서 뷰 템플릿 엔진은 뷰를 구현하는 데 도움을 주는 도구입니다.
+뷰 템플릿 파일을 처리하고, 그 안에 있는 동적 코드를 실제 데이터를 넣어서 최종 HTML을 생성하는 프로그램.
 주로 HTML 파일에 데이터를 동적으로 삽입하거나 변형하여 사용자에게 보여줄 콘텐츠를 생성하는 데 사용.
-
-예시 템플릿 엔진:
-    Jinja2: Python에서 Flask와 같은 프레임워크에서 사용됩니다.
-    Thymeleaf: Java 기반 웹 애플리케이션에서 자주 사용됩니다.
-    Handlebars.js: JavaScript에서 사용됩니다.
-
+    예시 템플릿 엔진:
+        Jinja2: Python에서 Flask와 같은 프레임워크에서 사용됩니다.
+        Thymeleaf: Java 기반 웹 애플리케이션에서 자주 사용됩니다.
+        Handlebars.js: JavaScript에서 사용됩니다.
 --%>
 
 <p> jsp는 서블릿에서 출력 부분이 자바 코드가 작성 부분과 역전된 페이지. 뷰view가 메인, 자바코드가 sub</p>
@@ -49,7 +47,7 @@ JSP 코드를 작성하면 내부적으로 서블릿의 doGet() 메서드가 이
      %>
 </p>
 
-<p> 백엔드에서 view를 렌더링하는 문서를 뷰템플릿(view template engine)이라고 한다.
+<p> 백엔드에서 view를 렌더링하는 문서파일을 뷰 템플릿(view template)이라고 한다.
     보통 서버언어(java)를 컴파일하거나 실행하는 엔진(javac, jvm)이 있고,
     뷰템플릿을 컴파일하고 실행하는 엔진이 따로 존재해서, 그것을 뷰템플릿 엔진이라고 부른다. </p>
 <p>Thymeleaf는 Java 애플리케이션에서 HTML, XML, JavaScript, CSS 파일을 렌더링하기 위한 서버 측 템플릿 엔진</p>
@@ -77,7 +75,6 @@ JSP 코드를 작성하면 내부적으로 서블릿의 doGet() 메서드가 이
         JSP에서는 Java 코드와 UI 코드가 섞이기 때문에,
         일부에서는 "로직과 표시가 분리되지 않았다"는 이유로 템플릿 엔진으로서의 한계가 있다고 볼 수 있습니다.   --%>
 </ul>
-
 </body>
 </html>
 
@@ -91,6 +88,7 @@ JSP 코드를 작성하면 내부적으로 서블릿의 doGet() 메서드가 이
 %>
     
 <%--  doPost(request, response) {
-        doGet(request, response)
         // post로 호출해도 get으로 호출된다.
+        // 자바가 jsp를 서블릿으로 변환하여 실행하기 때문.
+        // 쉽게 말해 이곳이 doGet 내부 코딩공간과 같다.
 }--%>
