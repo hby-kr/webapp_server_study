@@ -1,7 +1,7 @@
 package com.tj703.webapp_server_study.model2_service.dto;
 
 public class UserDto {
-    //    usermanagement.users.user_id
+//    usermanagement.users.user_id
 //    usermanagement.users.email
 //    usermanagement.users.password
 //    usermanagement.users.created_at

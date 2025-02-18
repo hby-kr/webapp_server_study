@@ -2,19 +2,19 @@ package com.tj703.webapp_server_study.model2_service.dto;
 
 public class LoginLogDto {
 
-    private int loginId;
+    private int logId;
     private int userId;
     private String loginTime;
-    private String loginIp;
+    private String ipAddress;
     private String userAgent;
 
     @Override
     public String toString() {
         return "{" +
-                "loginId=" + loginId +
+                "logId=" + logId +
                 ", userId=" + userId +
                 ", loginTime='" + loginTime + '\'' +
-                ", loginIp='" + loginIp + '\'' +
+                ", loginIp='" + ipAddress + '\'' +
                 ", userAgent='" + userAgent + '\'' +
                 "}\n";
     }
@@ -27,12 +27,12 @@ public class LoginLogDto {
         this.userAgent = userAgent;
     }
 
-    public String getLoginIp() {
-        return loginIp;
+    public String getIpAddress() {
+        return ipAddress;
     }
 
-    public void setLoginIp(String loginIp) {
-        this.loginIp = loginIp;
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public String getLoginTime() {
@@ -52,11 +52,11 @@ public class LoginLogDto {
     }
 
     public int getLoginId() {
-        return loginId;
+        return logId;
     }
 
     public void setLoginId(int loginId) {
-        this.loginId = loginId;
+        this.logId = loginId;
     }
 
 }

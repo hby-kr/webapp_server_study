@@ -1,6 +1,7 @@
 package com.tj703.webapp_server_study.model2_service.dto;
 
 public class PasswordChangeHistoryDto {
+
     private int changeId;
     private int userId;
     private String oldPassword;

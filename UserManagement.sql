@@ -42,6 +42,7 @@ CREATE TABLE password_change_history
     changed_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
+
 -- 더미 유저 생성 (비밀번호는 단순 예시, 실제로는 해시해야 함)
 INSERT INTO users (email, password)
 VALUES ('user1@example.com', '1234'),
