@@ -122,9 +122,9 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    // 세션에서 회원 이메일 가져오고, 폼문에서 입력받은 newPW 받아서, 새로운 dto 만들어서 그것이 인수로 들어온다고 가정.
+    // 세션에서 회원 이메일 가져오고, 폼문에서 입력받은 newPW 받아서, 새로운 dto 만들어서 newPw가 인수로 들어온다고 가정.
     public boolean modifyPw(UserDto user) throws Exception {
-        boolean modifyPwd = false;
+        boolean modifyPw = false;
 
         try {
             conn.setAutoCommit(false);
@@ -141,7 +141,7 @@ public class UserServiceImp implements UserService {
                 pswHistoryDto.setUserId(user.getUserId());
                 pswHistoryDto.setOldPassword(user.getPassword());
                 int pwInsert = pwHistoryDao.insert(pswHistoryDto);
-                modifyPwd = (pwInsert > 0 && update > 0);
+                modifyPw = (pwInsert > 0 && update > 0);
             }
             conn.commit();
         } catch (RuntimeException e) {
@@ -150,7 +150,7 @@ public class UserServiceImp implements UserService {
         } finally {
             if (conn != null) { conn.close();}
         }
-        return modifyPwd;
+        return modifyPw;
     }
 }
 

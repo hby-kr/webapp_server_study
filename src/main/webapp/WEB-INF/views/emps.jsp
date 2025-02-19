@@ -40,7 +40,7 @@ JSP 코드를 작성하면 내부적으로 서블릿의 doGet() 메서드가 이
         // out.println(empList); // 테스트 해봤음.
         // jsp파일이 PrintWriter out = resp.getWriter();가 이미 정의 되어있는 상태임. 그래서 바로 out.print()를 해버릴 수 있는 것
     } else {
-        response.sendRedirect("./index.html");
+        response.sendRedirect("./index.jsp");
     };
 %>
 

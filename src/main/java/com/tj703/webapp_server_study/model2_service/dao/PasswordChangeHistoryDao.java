@@ -17,4 +17,5 @@ public interface PasswordChangeHistoryDao {
     List<PasswordChangeHistoryDto> findByPwAndUserId(String pw, int id) throws Exception;
 
 
+
 }

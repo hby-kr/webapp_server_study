@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 
 <html>
@@ -6,6 +8,67 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
+<%--
+<% %>와 <%= %>는 JSP (JavaServer Pages)에서 사용하는 스크립트 태그
+1. <% %> — 스크립트let (Scriptlet)
+    <% %>는 Java 코드를 삽입하는 데 사용.
+    이 태그 내부에 Java 코드를 작성할 수 있습니다.
+    이 코드 내에서 변수 선언, 조건문, 반복문 등을 사용할 수 있음
+    그러나, 출력 결과는 HTML에 포함되지 않습니다.
+    즉, <% %> 내부의 코드는 서버에서 실행되지만 클라이언트로 직접 출력되지 않습니다.
+
+2. <%= %> — 표현식 (Expression)
+    <%= %>는 Java 코드를 실행하고 그 결과를 HTML로 출력하는 데 사용.
+    이 태그 내부에서 계산된 값이나 변수는 결과가 자동으로 출력됩니다.
+    즉, <%= %>는 Java 코드를 실행한 결과를 HTML 페이지에 포함시키는 역할
+    즉, out.print()나 out.println()을 명시적으로 사용하지 않고 결과값을 바로 출력할 수 있도록 해줍니다.
+--%>
+
+<%
+    // 출력한 index 페이지도 또한 서버의 응답이지 않겠나.
+    // 따라서 설정해놨다면 이미 쿠키가 있을 수 있음.
+    Cookie[] cookies = request.getCookies();  // 쿠키 가져와서.
+    Cookie isBannerCookie = null;  // 받을 객체 하나 만들고
+
+    if (cookies != null) {  // 쿠키가 있는 상태라면
+        for (Cookie c : cookies) {  // 쿠키 중 탐색
+            if (c.getName().equals("isBannerCookie")) { // 이름이 isBannerCookie인 녀석을 찾아서
+                isBannerCookie = c; // 그 녀석을 준비해놓은 객체에다가 대입
+            }
+        }
+    }
+%>
+
+<%
+    if (isBannerCookie == null || !isBannerCookie.getValue().equals("1")) {
+        // 준비해놓은 쿠키(하루동안 안보기는 사람한테 준 쿠키)가 없으면.. == 처음 접속이거나 쿠키가 만료되었으면. 아래의 팝업 실행 %>
+        <script type="text/javascript">
+            window.open("./L25Banner.jsp", "_blank", "width=800,height=200,left=100,top=100");
+            <%--window.open("http://localhost:8181/<%=request.getContextPath()%>/L25Banner.jsp", "_blank", "width=800,height=200,left=100,top=100");--%>
+            // 절대 경로로 URL을 넣으면 브라우져에서 새로운 접속으로 해서, 새로운 JSESSIONID를 서버에서 얻게 된다.
+            // 상대 경로를 URL을 넣으면 기존 접속을 바탕으로 하므로, 기존 JSESSIONID을 가진 채로 진행되게 된다.
+        </script>
+    <%}%>
+
+<%--
+   /*  window.open(URL, name, specs, replace);
+    window.open()은 JavaScript에서 새 브라우저 창이나 탭을 여는 데 사용되는 메서드
+    (URL, name, specs, replace);
+    - URL (optional): 새로 열려는 페이지의 URL입니다. 이 매개변수가 생략되면 빈 페이지가 열립니다. 기본값은 빈 문자열입니다.
+    - name (optional): 새로 열리는 창의 이름을 지정하는데 사용. 이 값은 창을 식별할 수 있는 고유한 이름이어야 하며, 새 창이 아닌 기존 창을 열 때 사용됩니다.
+        예를 들어, "blank"는 새 탭을 의미하고, "self"는 현재 창을 의미합니다.
+            _self: 현재 창에서 페이지를 로드 (기존 페이지를 대체)
+            _blank: 새 탭이나 새 창에서 페이지를 로드
+            _top: 최상위 창에서 페이지를 로드 (프레임이 있을 경우)
+            _parent: 부모 프레임에서 페이지를 로드 (프레임 내에서 사용)
+            사용자 지정 이름: 이름을 지정하여 특정 창을 타겟으로 페이지를 로드; 이름을 지정하면 동일한 이름을 가진 새 창이나 탭에서 열린 페이지는 기존 창을 덮어쓰게 됩니다. 즉, 새로 열린 창이 기존 창을 대체하게 됩니다.
+    - specs (optional): 새 창의 크기, 위치, 기타 속성에 대한 설정입니다.
+    문자열로, 쉼표로 구분된 여러 가지 옵션을 지정할 수 있습니다. 예를 들어, width=500,height=400와 같이 사용할 수 있습니다.
+    - replace (optional):
+    Boolean 값으로, true이면 새 URL이 히스토리 스택을 대체하고, false이면 새 URL이 히스토리 스택에 추가됩니다. 대부분의 경우 이 값은 생략하거나 false로 설정됩니다.
+    */
+--%>
+
 
 <h1> 웹 앱 서버 </h1>
 
@@ -16,21 +79,46 @@
     <li><a href="reqStudy.do">요청 수업</a></li>
     <li><a href="queryStringStrudy.do?name=abce&age=30">쿼리스트링 수업 (파라미터 name, age)</a></li>
     <li><a href="errorStudy.do">에러 처리 수업</a></li>
-    <li><a href="jdbcDeptList.do">JDBC 부서 리스트 수업</a></li><br>
+    <li><a href="jdbcDeptList.do">JDBC 부서 리스트 수업</a></li>
+    <br>
 
     <li><a href="empCRUDList.do">JDBC "사원" 관리CRUD 웹앱 수업 (model1)</a></li>
-    <li><a href="deptCRUD.do">JDBC "부서" 관리CRUD 웹앱 과제 (model1) (연습과제) </a></li><br>
+    <li><a href="deptCRUD.do">JDBC "부서" 관리CRUD 웹앱 과제 (model1) (연습과제) </a></li>
+    <br>
 
     <li><a href="L12ViewTemplateJSP.jsp">View Template JSP (개념)</a></li>
-    <li><a href="L13DeptList.jsp"> JSP로 구현하는 "부서"리스트 (jsp로 db까지 접속하기)</a></li><br>
+    <li><a href="L13DeptList.jsp"> JSP로 구현하는 "부서"리스트 (jsp로 db까지 접속하기)</a></li>
+    <br>
 
     <li><a href="model2/empList.do">모델2로 구현한 "사원" 리스트</a></li>
     <li><a href="model2/deptList.do">모델2로 구현한 "부서" 리스트 (연습과제)</a></li>
+    <br>
+
+    <li><a href="setCookies.do">쿠키 만드는 setcookie작업</a></li>
+    <li><a href="getCookies.do">쿠키 가져오는 getcookie작업</a></li>
+    <li><a href="setSession.do">세션 만들기</a></li>
+    <p>
+        <%
+            // 위 세션만들기 링크를 갔다오면서 세션이 (최초든 기존이든) 만들어져 있는 상태
+            Object emailObj = session.getAttribute("email");
+            Object nameObj = session.getAttribute("name");
+            Object marriedObj = session.getAttribute("married");
+            Object pwObj = session.getAttribute("pw");
+
+        %>
+        <b><%=emailObj%>(<%=nameObj%>, <%=marriedObj%>, <%=pwObj%>) 님 로그인 중</b>
+
+    </p>
+
+    <li><a href="M25CookieAndSession.jsp">부서정보(이름과 부서번호)로 로그인 + session 기능</a></li>
+
+
 </ul>
-<br><hr>
+<br>
+<hr>
 
 <div>
-<!-- action이 요청하는 곳, 주소를 쓰면 됨   -->
+    <!-- action이 요청하는 곳, 주소를 쓰면 됨   -->
     <form method="post" action="postStudy.do">
         <p><label>
             유저계정 :<input type="text" name="userId" value="경만">
@@ -45,8 +133,8 @@
         </p>
     </form>
 </div>
-<br><hr>
-
+<br>
+<hr>
 
 
 <h2>경로 수업</h2>
@@ -131,7 +219,7 @@ http://localhost:8080/                                              [호스트�
     <hr>
     <br>
 
-    <li>상대경로 : (./book.com 이거나  book.com) 현재 위치에서 리소스 탐색 ex) ./home/book.com과 home/book.com도  동일한 위치
+    <li>상대경로 : (./book.com 이거나 book.com) 현재 위치에서 리소스 탐색 ex) ./home/book.com과 home/book.com도 동일한 위치
         <ol>
             <li>현재위치
                 https://naver.com/store/detail/web/detail.do
@@ -165,7 +253,6 @@ http://localhost:8080/                                              [호스트�
         </ol>
     </li>
 </ul>
-
 
 
 </body>

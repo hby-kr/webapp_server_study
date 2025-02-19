@@ -52,7 +52,6 @@ public class PasswordChangeHistoryDaoImp implements PasswordChangeHistoryDao {
         return list;
     }
 
-
     @Override
     public List<PasswordChangeHistoryDto> findByChangeAtAndUserId(String changeAt, int UserId) throws Exception {
         List<PasswordChangeHistoryDto> list = null;

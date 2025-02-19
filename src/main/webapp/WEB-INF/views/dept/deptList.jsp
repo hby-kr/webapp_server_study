@@ -12,7 +12,7 @@
     if (deptListObj != null && deptListObj instanceof List) { // 정상적으로 와서, 비어있지 않고, list 타입이면..
         deptList = (List<M17deptDto>) request.getAttribute("deptList"); // 포워드로 받은 객체를 형번환해서 넣음
     } else {
-        response.sendRedirect("../../index.html");
+        response.sendRedirect("../../index.jsp");
     }
 %>
 

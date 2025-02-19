@@ -42,6 +42,9 @@ class UserDaoImpTest {
 
     @Test
     void updateSetPasswordByEmail() throws Exception {
-        System.out.println(userDao.updateSetPasswordByEmail("asdf@asdfs.com", "5678"));
+        UserDto user = new UserDto();
+        user.setPassword("1111");
+        user.setEmail("inserttest@gmail.com");
+        System.out.println(userDao.updateSetPasswordByEmail(user));
     }
 }
