@@ -24,7 +24,7 @@ public class L25SetBannerCookie extends HttpServlet {
 
         // 쿠키 만들고, 만료시간 정하고, 보내기
         Cookie cookie = new Cookie("isBannerCookie", isBannerCookie); // 받아 온 값으로 쿠키만들고
-        cookie.setMaxAge(60*5); // 만료시간 설정하고
+        cookie.setMaxAge(60*30); // 만료시간 설정하고
         resp.addCookie(cookie); // 쿠키 보내기
 
         // 자동 꺼짐 작동하게 코드 짜기

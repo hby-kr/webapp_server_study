@@ -1,3 +1,4 @@
+<%@ page import="com.tj703.webapp_server_study.model2_service.dto.UserDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -42,13 +43,13 @@
 <%
     if (isBannerCookie == null || !isBannerCookie.getValue().equals("1")) {
         // 준비해놓은 쿠키(하루동안 안보기는 사람한테 준 쿠키)가 없으면.. == 처음 접속이거나 쿠키가 만료되었으면. 아래의 팝업 실행 %>
-        <script type="text/javascript">
-            window.open("./L25Banner.jsp", "_blank", "width=800,height=200,left=100,top=100");
-            <%--window.open("http://localhost:8181/<%=request.getContextPath()%>/L25Banner.jsp", "_blank", "width=800,height=200,left=100,top=100");--%>
-            // 절대 경로로 URL을 넣으면 브라우져에서 새로운 접속으로 해서, 새로운 JSESSIONID를 서버에서 얻게 된다.
-            // 상대 경로를 URL을 넣으면 기존 접속을 바탕으로 하므로, 기존 JSESSIONID을 가진 채로 진행되게 된다.
-        </script>
-    <%}%>
+<script type="text/javascript">
+    window.open("./L25Banner.jsp", "_blank", "width=800,height=200,left=100,top=100");
+    <%--window.open("http://localhost:8181/<%=request.getContextPath()%>/L25Banner.jsp", "_blank", "width=800,height=200,left=100,top=100");--%>
+    // 절대 경로로 URL을 넣으면 브라우져에서 새로운 접속으로 해서, 새로운 JSESSIONID를 서버에서 얻게 된다.
+    // 상대 경로를 URL을 넣으면 기존 접속을 바탕으로 하므로, 기존 JSESSIONID을 가진 채로 진행되게 된다.
+</script>
+<%}%>
 
 <%--
    /*  window.open(URL, name, specs, replace);
@@ -69,6 +70,12 @@
     */
 --%>
 
+
+<%-- jsp 파일을 템플릿(Template)으로 가져오기
+이 지시어는 페이지 내에서 다른 파일의 내용을 서버 측에서 삽입(included) 할 수 있도록 도와줌
+템플릿(Template)은 일반적으로 웹 개발에서 구조를 정의하고 재사용 가능한 형식을 제공하는 방식 --%>
+<%--    서버 내부에서 루트 상대 경로는 /webapp 하위다.   --%>
+<%@include file="/WEB-INF/views/service/header.jsp"%>  <br><br><br><br>
 
 <h1> 웹 앱 서버 </h1>
 
@@ -110,7 +117,10 @@
 
     </p>
 
-    <li><a href="M25CookieAndSession.jsp">부서정보(이름과 부서번호)로 로그인 + session 기능</a></li>
+    <li><a href="M25CookieAndSession.jsp">부서정보(이름과 부서번호)로 로그인 + session 기능 (연습 과제)</a></li>
+    <br>
+
+    <li><a href="service/login.do">UserManagement DB 유저 로그인 예제</a></li>
 
 
 </ul>

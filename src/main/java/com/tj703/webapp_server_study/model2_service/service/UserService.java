@@ -1,13 +1,19 @@
 package com.tj703.webapp_server_study.model2_service.service;
 
+import com.tj703.webapp_server_study.model2_service.dto.LoginLogDto;
 import com.tj703.webapp_server_study.model2_service.dto.UserDto;
+import com.tj703.webapp_server_study.model2_service.dto.UserServiceLoginDto;
 
 import java.util.Map;
 
 public interface UserService {
 
     // 1. Map으로 구현하기
-    Map<String, Object> login(String email, String password) throws Exception;
+    Map<String, Object> login(String email, String password, String ip, String agent) throws Exception;
+
+    // Map으로 반환하는거 별로라서 다시 오버로딩
+    UserServiceLoginDto login(UserDto user, LoginLogDto loginLog) throws Exception;
+     // session 수업하면서 다른 것 필요해서 다시 만듬
 
 
     // 회원가입

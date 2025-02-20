@@ -4,6 +4,7 @@ import com.tj703.webapp_server_study.model2_service.dao.*;
 import com.tj703.webapp_server_study.model2_service.dto.LoginLogDto;
 import com.tj703.webapp_server_study.model2_service.dto.PasswordChangeHistoryDto;
 import com.tj703.webapp_server_study.model2_service.dto.UserDto;
+import com.tj703.webapp_server_study.model2_service.dto.UserServiceLoginDto;
 
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -42,29 +43,34 @@ public class UserServiceImp implements UserService {
         pwHistoryDao = new PasswordChangeHistoryDaoImp(conn);
     }
 
-    @Override
-    public Map<String, Object> login(String email, String password) throws Exception {
-        Map<String, Object> login = new HashMap<>();
 
+    @Override
+    public Map<String, Object> login(String email, String password, String ip, String agent) throws Exception {
+
+        Map<String, Object> login = new HashMap<>();
         try {
             conn.setAutoCommit(false); // 쿼리를 실행할때마다 각 코드가 독립성을 가지기 때문에, 오토커밋 끔.
             conn.commit(); // 세이브 포인트 만듬
             //conn.setSavepoint("1") 더 구분할 수도 있음.
 
             UserDto user = userDao.findByemailAndPassword(email, password);
+            // 성공하면 로그발생시키면 되는데..
+            // 일치하는 회원정보 없으면..
+            if (user == null) { return login;} // 실패하면 그냥 로그 남기지 않고 여기서 리턴. 그 결과 위에서 만든 map login은 null로 반환될 것.
 
+            // 로그인 로그 생성
             LoginLogDto loginLog = new LoginLogDto();
             loginLog.setUserId(user.getUserId());
-            loginLog.setIpAddress("127.0.0.1");
-            loginLog.setUserAgent("Mozilla");
-
+            loginLog.setIpAddress(ip);
+            loginLog.setUserAgent(agent);
             int insert = loginLogDao.insert(loginLog);
 
+            // pw 비번 이력 확인하기
             LocalDate now = LocalDate.now();
-            String prev6Month = now.minusMonths(6).toString();
+            String prev6Month = now.minusMonths(6).toString(); // 현재기준으로 6개월 전
             List<PasswordChangeHistoryDto> pwList = pwHistoryDao.findByChangeAtAndUserId(prev6Month, user.getUserId());
 
-            // Map 구조 만들기
+            // Map에 키-값 넣기
             login.put("user", user);
             login.put("isPwHistory", (pwList.size() > 0)); // null이어야 6개월 이내에 바꾼 것임. null이 아니면 비번변경해야.
             login.put("isInsertLog", insert > 0);
@@ -83,6 +89,47 @@ public class UserServiceImp implements UserService {
         }
         return login;
 
+    }
+
+
+    // session 수업하면서 다른 것 필요해서 편리하게 다시 만듬
+    // dto를 매개변수로 하여 받고, 다시 또다른 dto를 반환하는 구조로 설계. 이게 더 편함
+    @Override
+    public UserServiceLoginDto login(UserDto user, LoginLogDto loginLog) throws Exception {
+        UserServiceLoginDto login = null;
+
+        try {
+            conn.setAutoCommit(false);
+            conn.commit();
+
+            // 로그인 성공부터 시키기
+            UserDto loginUser = userDao.findByemailAndPassword(user.getEmail(), user.getPassword()); // 회원정보 찾고
+            if (loginUser == null) { return login; }  // 회원정보 없으면 여기서 나감
+
+            // 회원정보 있으면(==성공하면) 아래 계속 실행
+            loginLog.setUserId(loginUser.getUserId()); // 나머지 정보는 그 시점에서 가져옴
+            int loginInsert = loginLogDao.insert(loginLog); // 로그 넣기
+
+            // 비번 변경 이력 있는지 확인하기
+            List<PasswordChangeHistoryDto> pwHistoryList = null;
+            LocalDate now = LocalDate.now();
+            String prevSixMonth = now.minusMonths(6).toString();
+            pwHistoryList = pwHistoryDao.findByChangeAtAndUserId(prevSixMonth, loginUser.getUserId());
+
+            // 유저 로그인 성공하고 난 뒤에 정보들을 세션에 넣을 dto 만들기
+            login = new UserServiceLoginDto();
+            login.setUser(loginUser);
+            login.setPwHistory(pwHistoryList.size() > 0);
+
+            conn.commit();
+        } catch (Exception e) {
+            conn.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {conn.close();}
+        }
+
+        return login;
     }
 
 
@@ -133,9 +180,9 @@ public class UserServiceImp implements UserService {
             user = userDao.findByEmail(user.getEmail());
             // user_id로 find 메서드를 만들어놔서 이 짓을 하는 것임
             List<PasswordChangeHistoryDto> pwList = pwHistoryDao.findByPwAndUserId(newPw, user.getUserId());
-
             // pwList.size > 0 면, 이전 비번과 중복상태
             if (pwList.size() == 0) {
+                user.setPassword(newPw);
                 int update = userDao.updateSetPasswordByEmail(user);
                 PasswordChangeHistoryDto pswHistoryDto = new PasswordChangeHistoryDto();
                 pswHistoryDto.setUserId(user.getUserId());
@@ -148,7 +195,9 @@ public class UserServiceImp implements UserService {
             conn.rollback();
             throw new RuntimeException(e);
         } finally {
-            if (conn != null) { conn.close();}
+            if (conn != null) {
+                conn.close();
+            }
         }
         return modifyPw;
     }

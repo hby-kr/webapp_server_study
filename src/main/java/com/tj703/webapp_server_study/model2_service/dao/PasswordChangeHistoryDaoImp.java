@@ -55,7 +55,8 @@ public class PasswordChangeHistoryDaoImp implements PasswordChangeHistoryDao {
     @Override
     public List<PasswordChangeHistoryDto> findByChangeAtAndUserId(String changeAt, int UserId) throws Exception {
         List<PasswordChangeHistoryDto> list = null;
-        String sql = "select * from password_change_history where user_id = ? and changed_at <  ? ";
+        String sql = "select * from password_change_history where user_id = ? and changed_at > ? ";
+        // 지금 기준 6개월 전부터 지금까지 유저가 비밀번호를 바꾼 이력이 있나?
         ps = conn.prepareStatement(sql);
         ps.setInt(1, UserId);
         ps.setString(2, changeAt);
