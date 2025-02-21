@@ -13,7 +13,10 @@ public interface UserService {
 
     // Map으로 반환하는거 별로라서 다시 오버로딩
     UserServiceLoginDto login(UserDto user, LoginLogDto loginLog) throws Exception;
-     // session 수업하면서 다른 것 필요해서 다시 만듬
+    // session 수업하면서 다른 것 필요해서 다시 만듬
+
+    // 위에 login은 평문, 아래 로그인은 해쉬값이 들어온다.
+    UserServiceLoginDto autoLogin(UserDto user, LoginLogDto loginLog) throws Exception;
 
 
     // 회원가입

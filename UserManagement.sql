@@ -45,8 +45,8 @@ CREATE TABLE password_change_history
 
 -- 더미 유저 생성 (비밀번호는 단순 예시, 실제로는 해시해야 함)
 INSERT INTO users (email, password)
-VALUES ('user1@example.com', '1234'),
-       ('user2@example.com', '1234');
+VALUES ('user1@example.com', '$2a$10$hxjZa.qXt24Hl1tU50qs.Oqo38r1OgH1GkBxwUUrL6DRT8wRpuemW'),
+       ('user2@example.com', '$2a$10$hxjZa.qXt24Hl1tU50qs.Oqo38r1OgH1GkBxwUUrL6DRT8wRpuemW');
 
 -- 로그인 기록 추가
 INSERT INTO login_logs (user_id, ip_address, user_agent)
@@ -55,5 +55,5 @@ VALUES (1, '192.168.1.1', 'Mozilla/5.0'),
 
 -- 비밀번호 변경 이력 추가
 INSERT INTO password_change_history (user_id, old_password)
-VALUES (1, '1234'),
-       (2, '1234');
+VALUES (1, '$2a$10$hxjZa.qXt24Hl1tU50qs.Oqo38r1OgH1GkBxwUUrL6DRT8wRpuemW'),
+       (2, '$2a$10$hxjZa.qXt24Hl1tU50qs.Oqo38r1OgH1GkBxwUUrL6DRT8wRpuemW');

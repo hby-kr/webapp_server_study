@@ -13,7 +13,7 @@
 <%}%>
 
 
-<header style="display: flex; justify-content: space-between; align-items: center; background: cornsilk; border-bottom: 1px solid black; position: fixed; left: 0; right: 0;">
+<header style="display: flex; justify-content: space-between; align-items: center; background: cornsilk; border-bottom: 1px solid black; position: fixed; left: 0; right: 0; box-sizing: border-box; border-radius: 10px; ">
   <h3><a href="<%=request.getContextPath()%>/">홈</a></h3>
 
   <% if (loginUserObj != null) {  // 로그인 되었다면,
@@ -21,7 +21,12 @@
   %>
   <div>
     <span> <%=loginUser.getEmail()%>님(<%=loginUser.getUserId()%>) 로그인중-</span>
+
+    <a href="<%=request.getContextPath()%>/service/pwModify.do"><b>비번변경</b></a>
     <a href="<%=request.getContextPath()%>/service/logout.do"><b>로그아웃</b></a>
   </div>
+  <%} else {%>
+    <div><a href="<%=request.getContextPath()%>/service/login.do"><b>로그인</b></a>  </div>
   <%}%>
+
 </header>

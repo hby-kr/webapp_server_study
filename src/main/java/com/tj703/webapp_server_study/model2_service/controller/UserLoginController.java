@@ -6,10 +6,8 @@ import com.tj703.webapp_server_study.model2_service.dto.UserServiceLoginDto;
 import com.tj703.webapp_server_study.model2_service.service.UserServiceImp;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.util.Map;
@@ -112,7 +110,6 @@ UserServiceImp에서 다시 메서드를 오버로딩하여 다른 작업으로 
         String password = req.getParameter("password");
         String autoLogin = req.getParameter("auto_login");
         String autoemail = req.getParameter("auto_email");
-
         // ip와 클라이언트의 브라우저 조회하기
         String ipAddress = req.getRemoteAddr();
         String browser = req.getHeader("sec-ch-ua");
@@ -125,18 +122,18 @@ UserServiceImp에서 다시 메서드를 오버로딩하여 다른 작업으로 
         String msg = null; // 세션에 msg를 보내서, view에서 msg가 있을 때, alert으로 경고 후 메세지를 삭제
         UserServiceLoginDto loginDto = null;
 
-        // 매개변수 받아서 dto 생성 -> dto 넣어서 log메서드(db접속해서 확인하고 있는지 없는지)돌리기
-        try{
+        // 매개변수 받아서 dto 생성하고 -> 그 dto를 넣어서 log메서드(db접속해서 확인하고 있는지 없는지 확인하는 메서드)돌리기
+        try {
             // 로그인 form에서 받아온 변수로 회원dto, 로그dto 객체 만들기
-            UserDto user = new UserDto();
+            UserDto user = new UserDto(); // 회원 dto
             user.setEmail(email);
             user.setPassword(password);
-            LoginLogDto log = new LoginLogDto();
+            LoginLogDto log = new LoginLogDto(); // 로그 dto
             log.setIpAddress(ipAddress);
             log.setUserAgent(agents[1]);
+
             // 만든 dto를 매개변수로 login 서비스 돌리기
             loginDto = new UserServiceImp().login(user, log); // 로그인 실패면 null, 성공이면...
-
         } catch (Exception e) {
             e.printStackTrace();
             resp.sendError(500);
@@ -144,11 +141,28 @@ UserServiceImp에서 다시 메서드를 오버로딩하여 다른 작업으로 
         }
 
         // login 메서드의 성공,실패 여부로 리디렉션
-        if (loginDto != null && loginDto.getUser() !=null) { // 로그인 성공
+        if (loginDto != null && loginDto.getUser() != null) { // 로그인 성공
             HttpSession session = req.getSession(); // 세션 만들어서
             session.setAttribute("loginUser", loginDto.getUser()); // 세션에 유저정보 값으로 넣기
 
-            if(loginDto.isPwHistory()) { // true == 있음 == 최근 변경함
+            if(autoLogin != null && autoLogin.equals("1")) { // auto로그인도 사용자가 체크해서 매개변수로 들어왔다면
+                // autoLogin이 있고, 1이면, 아래 코드로 쿠키 생성
+                // 이 쿠키로 autoLoginFilter에서 자동로그인을 구현한다.
+                Cookie autoPwCookie = new Cookie("auto_password", loginDto.getUser().getPassword());// 쿠키를 만들고
+                Cookie autoLoginCookie = new Cookie("auto_login", autoLogin);
+                Cookie autoEmailCookie = new Cookie("auto_email", loginDto.getUser().getEmail());
+                autoPwCookie.setPath("/"); // 쿠기를 어디서 작동할 것인지 정하고
+                autoLoginCookie.setPath("/");
+                autoEmailCookie.setPath( "/");
+                autoPwCookie.setMaxAge(60 * 60 * 24 * 30); // 만료시간 정하고
+                autoLoginCookie.setMaxAge(60 * 60 * 24 * 30);
+                autoEmailCookie.setMaxAge(60 * 60 * 24 * 30);
+                resp.addCookie(autoPwCookie); // 쿠키를 넣는다
+                resp.addCookie(autoLoginCookie);
+                resp.addCookie(autoEmailCookie);
+            }
+
+            if (loginDto.isPwHistory()) { // true == 있음 == 최근 변경함
                 resp.sendRedirect(req.getContextPath() + "/");
             } else { // false == 없음 == 6개월 이전 변경함 -> 리디렉트
                 resp.sendRedirect(req.getContextPath() + "/service/pwModify.do");

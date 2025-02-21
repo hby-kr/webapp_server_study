@@ -8,6 +8,14 @@ public class UserServiceLoginDto {
     private UserDto user;  // 필드로 dto를 받을거임
     private boolean isPwHistory;
 
+    @Override
+    public String toString() {
+        return "UserServiceLoginDto{" +
+                "user=" + user +
+                ", isPwHistory=" + isPwHistory +
+                '}';
+    }
+
     public UserDto getUser() {
         return user;
     }

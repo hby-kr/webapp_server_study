@@ -12,10 +12,10 @@
 <div>
     <form action="login.do" method="post">
         <p><label>
-            <b>user 이메일</b><input type="text" name="email" value="inserttest@gmail.com"/>
+            <b>user 이메일</b><input type="text" name="email" value="user1@example.com"/>
         </label></p>
         <p><label>
-            <b>비밀번호</b><input type="password" name="password" value="1111"/>
+            <b>비밀번호</b><input type="text" name="password" value="1234"/>
         </label></p>
         <p><label>
             <b>아이디 저장 (쿠키 활용)</b><input type="checkbox" name="auto_email" value="1"/>

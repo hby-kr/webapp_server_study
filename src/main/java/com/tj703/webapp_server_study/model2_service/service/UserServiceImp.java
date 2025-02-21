@@ -5,6 +5,7 @@ import com.tj703.webapp_server_study.model2_service.dto.LoginLogDto;
 import com.tj703.webapp_server_study.model2_service.dto.PasswordChangeHistoryDto;
 import com.tj703.webapp_server_study.model2_service.dto.UserDto;
 import com.tj703.webapp_server_study.model2_service.dto.UserServiceLoginDto;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -44,6 +45,7 @@ public class UserServiceImp implements UserService {
     }
 
 
+
     @Override
     public Map<String, Object> login(String email, String password, String ip, String agent) throws Exception {
 
@@ -53,10 +55,17 @@ public class UserServiceImp implements UserService {
             conn.commit(); // 세이브 포인트 만듬
             //conn.setSavepoint("1") 더 구분할 수도 있음.
 
-            UserDto user = userDao.findByemailAndPassword(email, password);
+            UserDto user = userDao.findByEmail(email);
             // 성공하면 로그발생시키면 되는데..
             // 일치하는 회원정보 없으면..
-            if (user == null) { return login;} // 실패하면 그냥 로그 남기지 않고 여기서 리턴. 그 결과 위에서 만든 map login은 null로 반환될 것.
+            // password = 1234 (평문)
+            // BCrypt 암호화 되어 있는 경우 == user.getPw()가 해시코드다.
+            // 이 둘을 비교해서 로그인 정보를 확인
+            System.out.println(password);
+            System.out.println(user);
+            if (user == null || !BCrypt.checkpw(password, user.getPassword())) {
+                return login;
+            } // 실패하면 그냥 로그 남기지 않고 여기서 리턴. 그 결과 위에서 만든 map login은 null로 반환될 것.
 
             // 로그인 로그 생성
             LoginLogDto loginLog = new LoginLogDto();
@@ -92,6 +101,8 @@ public class UserServiceImp implements UserService {
     }
 
 
+
+
     // session 수업하면서 다른 것 필요해서 편리하게 다시 만듬
     // dto를 매개변수로 하여 받고, 다시 또다른 dto를 반환하는 구조로 설계. 이게 더 편함
     @Override
@@ -103,8 +114,11 @@ public class UserServiceImp implements UserService {
             conn.commit();
 
             // 로그인 성공부터 시키기
-            UserDto loginUser = userDao.findByemailAndPassword(user.getEmail(), user.getPassword()); // 회원정보 찾고
-            if (loginUser == null) { return login; }  // 회원정보 없으면 여기서 나감
+            UserDto loginUser = userDao.findByEmail(user.getEmail()); // 회원정보 찾고
+            if (user == null || !BCrypt.checkpw(user.getPassword(), loginUser.getPassword())) {
+                return login;
+            }
+            // 회원정보 없거나, 비번이 일치하지 않으면 여기서 끝내서 반환하자.
 
             // 회원정보 있으면(==성공하면) 아래 계속 실행
             loginLog.setUserId(loginUser.getUserId()); // 나머지 정보는 그 시점에서 가져옴
@@ -126,9 +140,54 @@ public class UserServiceImp implements UserService {
             conn.rollback();
             throw new RuntimeException(e);
         } finally {
-            if (conn != null) {conn.close();}
+            if (conn != null) {
+                conn.close();
+            }
         }
+        return login;
+    }
 
+
+
+
+    @Override
+    public UserServiceLoginDto autoLogin(UserDto user, LoginLogDto loginLog) throws Exception {
+        // 여기는 db에 저장된 pw 해시코드와 쿠키에 저장된 pw해시코드가 같은지 비교하는 메서드다
+
+        UserServiceLoginDto login = null;
+        try {
+            conn.setAutoCommit(false);
+            conn.commit();
+
+            // 로그인 성공부터 시키기
+            UserDto loginUser = userDao.findByemailAndPassword(user.getEmail(), user.getPassword()); // 회원정보 찾고
+            if (loginUser == null) { return login;}
+            // 회원정보 없거나, 비번이 일치하지 않으면 여기서 끝내서 반환하자.
+
+            // 회원정보 있으면(==성공하면) 아래 계속 실행
+            loginLog.setUserId(loginUser.getUserId()); // 나머지 정보는 그 시점에서 가져옴
+            int loginInsert = loginLogDao.insert(loginLog); // 로그 넣기
+
+            // 비번 변경 이력 있는지 확인하기
+            List<PasswordChangeHistoryDto> pwHistoryList = null;
+            LocalDate now = LocalDate.now();
+            String prevSixMonth = now.minusMonths(6).toString();
+            pwHistoryList = pwHistoryDao.findByChangeAtAndUserId(prevSixMonth, loginUser.getUserId());
+
+            // 유저 로그인 성공하고 난 뒤에 정보들을 세션에 넣을 dto 만들기
+            login = new UserServiceLoginDto();
+            login.setUser(loginUser);
+            login.setPwHistory(pwHistoryList.size() > 0);
+
+            conn.commit();
+        } catch (Exception e) {
+            conn.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
         return login;
     }
 
